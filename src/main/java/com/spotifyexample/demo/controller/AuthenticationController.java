@@ -1,17 +1,53 @@
 package com.spotifyexample.demo.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.spotifyexample.demo.service.SpotifyService;
+import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.specification.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/")
 public class AuthenticationController {
 
-    @RequestMapping(value = "/callback", method = RequestMethod.GET)
-    public void queryMethod(@RequestParam String code)  {
-        System.out.println("Our Code is : " + code);
+    @Autowired
+    private SpotifyService spotifyService;
 
+    @GetMapping("/")
+    public ResponseEntity<Object> index() {
+        return ResponseEntity
+                .status(HttpStatus.SEE_OTHER)
+                .header("Location", this.spotifyService.getAuthorizationUri().toString())
+                .build();
     }
+
+    @GetMapping("/callback")
+    public ResponseEntity<Object> queryMethod(@RequestParam String code) throws IOException, SpotifyWebApiException {
+        spotifyService.completeAuthorizationFromCode(code);
+        return ResponseEntity
+                .status(HttpStatus.SEE_OTHER)
+                .header("Location", "/userinfo")
+                .build();
+    }
+
+    @GetMapping("/userinfo")
+    public User userInfo() throws IOException, SpotifyWebApiException {
+        return spotifyService.getUserInfo();
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Object> logout() throws IOException, SpotifyWebApiException {
+        this.spotifyService.logout();
+        return ResponseEntity
+                .status(HttpStatus.SEE_OTHER)
+                .header("Location", "/")
+                .build();
+    }
+
+
+
 }
