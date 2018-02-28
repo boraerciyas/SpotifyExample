@@ -8,6 +8,8 @@ import com.wrapper.spotify.requests.authorization.authorization_code.Authorizati
 import com.wrapper.spotify.requests.data.albums.GetAlbumsTracksRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,6 +40,7 @@ public class SpotifyExampleApplication {
 		System.out.println("URI: " + uri.toString());
 	}
 
+
 //	private static final GetAlbumsTracksRequest getAlbumsTracksRequest = spotifyApi.getAlbumsTracks(arminVanBuurenID)
 //			.limit(10)
 //			.offset(0)
@@ -61,6 +64,6 @@ public class SpotifyExampleApplication {
 
 		authorizationCodeUri_Sync();
 
-//		getAlbumsTracks_Async();
+//
 	}
 }
