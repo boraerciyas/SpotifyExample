@@ -2,7 +2,9 @@ package com.spotifyexample.demo.controller;
 
 import com.spotifyexample.demo.service.SpotifyService;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.miscellaneous.Device;
 import com.wrapper.spotify.model_objects.specification.User;
+import com.wrapper.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,16 @@ public class AuthenticationController {
     @GetMapping("/userinfo")
     public User userInfo() throws IOException, SpotifyWebApiException {
         return spotifyService.getUserInfo();
+    }
+
+    @GetMapping("/devices")
+    public Device[] devices() throws IOException, SpotifyWebApiException {
+        return spotifyService.getAvailableDevices();
+    }
+
+    @GetMapping("/play")
+    public String play() throws IOException, SpotifyWebApiException {
+        return spotifyService.startResumeUsersPlaybackRequest();
     }
 
     @GetMapping("/logout")
